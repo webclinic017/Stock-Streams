@@ -1,0 +1,8 @@
+.env
+db.sqlite3
+
+portfolio/migrations
+
+analysis/migrations
+
+.DS_Store

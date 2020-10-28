@@ -1,0 +1,91 @@
+{% extends 'portfolio/base.html' %}
+
+{% block content %}
+<div>
+	<h1 class="py-3 display-3">Portfolio</h1>
+	<div class="d-flex">
+		<div class="w-25">
+			<div>
+				<h1>Returns</h1>
+				<h1 
+					class="
+						{% if returns >= 0 %} 
+						text-success 
+						{% else %} 
+						text-danger 
+						{% endif %}"
+				>${{ returns }}</h1>
+			</div>
+			<div>
+				<h2>Buying Power: <h2>${{ bp }}</h2></h2>
+				<h2>Cash: <h2>${{ cash }}</h2></h2>
+			</div>
+		</div>
+		<div class="w-75">
+			<div class="d-flex justify-content-between">
+				<h1>Positions</h1>
+				<div>
+					<h3>Market:
+					{% if market_status %}
+						<span class="text-success">Active</span>
+					{% else %}
+						<span class="text-danger">Inactive</span>
+					{% endif %}
+					</h3>
+				</div>
+			</div>
+			{% if positions %}
+			<table class="table table-bordered table-hover">
+				<thead>
+					<tr>
+						<!-- <th colspan="1">Company</th>
+						<th colspan="1">Price</th>
+						<th colspan="1">Cost Basis</th>
+						<th colspan="1">Change Today</th>
+						<th colspan="1">Shares</th> -->
+						{% for keys in assets.0 %}
+							<th colspan="1">{{ keys }}</th>
+						{% endfor %}
+						<th colspan="" rowspan="" headers="" scope="">Buy</th>
+						<th colspan="" rowspan="" headers="" scope="">Sell</th>
+					</tr>
+				</thead>
+				<!-- <tbody>
+					{% for p in positions %}
+						<tr>
+							<th scope="" colspan="1">{{ p.symbol }}</th>
+							<td colspan="1">{{ p.current_price }}</td>
+							<td colspan="1">{{ p.cost_basis }}</td>
+							<td colspan="1">{{ p.change_today }}</td>
+							<td colspan="1">{{ p.qty }}</td>
+							<td><a href="{% url 'buy' p.symbol %}" title="">Buy</a></td>
+							<td><a href="{% url 'sell' p.symbol %}" title="">Sell</a></td>
+						</tr>
+					{% endfor %}
+				</tbody> -->
+				<tbody>
+					{% for a in assets %}
+						<tr data-href="{}">
+							{% for key, data in a.items %}
+								{% if key == 'symbol' or key == 'name' %}
+									<th colspan="1">{{ data }}</th>
+								{% else %}
+									<td scope="" colspan="1">{{ data }}</td>
+								{% endif %}
+							{% endfor %}
+							<td><a href="{% url 'buy' a.symbol %}" title="">Buy</a></td>
+							<td><a href="{% url 'sell' a.symbol %}" title="">Sell</a></td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+			{% else %}
+			<a href="{% url 'buy' %}" title="buy"><h3>Start Investing!</h3></a>
+			{% endif %}
+		</div>
+	</div>
+</div>
+
+
+
+{% endblock %}
