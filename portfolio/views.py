@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, reverse
 from django.http import HttpResponse, Http404
 
+import json
 # Create your views here.
 
 from . import alpaca 
@@ -64,3 +65,69 @@ def buy(request, symbol):
 
 def sell(request, symbol):
 	return HttpResponse("Sell Here!")
+
+def stock(request, symbol):
+
+	order_msg = ''
+	if request.method == 'POST':
+		# order_request = json.dumps(request.body)
+		params = request.POST
+		print(params)
+		order_side = params['orderside']
+		share = request.POST.getlist('shares')
+		order_type = params['ordertype']
+		print(f'{order_side} {share[(len(order_side)+1)%2]} shares of {symbol}')
+		order_success = alpaca.submit_order(
+			symbol=symbol,
+			qty=share[(len(order_side)+1)%2],
+			side=order_side,
+			type=order_type
+			)
+		if order_success:
+			order_msg = 'Success!'
+		else:
+			order_msg = 'Sorry, insufficient buying power'
+		# if order_type == 'buy':
+		# 	print(f'{order_type} {share[len]} shares of {symbol}')
+		# elif order_type == 'sell':
+		# 	print(f'{order_type} {share[1]} shares of {symbol}')
+		# print(params['ordertype'])
+		# print(f'shares: {share}')
+	context = {
+		'symbol': symbol,
+		'price': 13.00,
+		'is_holding': True,
+		'order_msg': order_msg
+	}
+	return render(request, template_name="portfolio/stock.html", context=context)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

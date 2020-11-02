@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div>
+	<h1 class="py-3 display-3">Buy</h1>
+	<div class="">
+		<form method="POST">
+			{% csrf_token %}
+			{{ form|crispy }}
+			<input type="submit" value="Search">
+		</form>
+	</div>
+</div>
+{% endblock %}

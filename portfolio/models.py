@@ -4,6 +4,7 @@ from django.db import models
 class Account(models.Model):
 	name = models.CharField(max_length=100)
 	balance = models.FloatField(default=0.0)
+	initial = models.FloatField(default=0.0)
 
 	def __str__(self):
 		return self.name

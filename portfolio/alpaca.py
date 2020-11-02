@@ -49,3 +49,12 @@ def populate_historical(symbol, timeframe="day", limit=300, start=None, end=None
 
 def market_status():
 	return client.get_clock().is_open == True
+
+
+def submit_order(symbol, qty, side, type, time_in_force='day'):
+	print(f'{symbol} {side} {qty} {type} {time_in_force}')
+	try:
+		# client.submit_order(symbol.upper(), qty, side, type, time_in_force)
+		return True
+	except:
+		return False

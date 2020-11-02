@@ -46,8 +46,8 @@
 						{% for keys in assets.0 %}
 							<th colspan="1">{{ keys }}</th>
 						{% endfor %}
-						<th colspan="" rowspan="" headers="" scope="">Buy</th>
-						<th colspan="" rowspan="" headers="" scope="">Sell</th>
+						<th colspan="1" rowspan="" headers="" scope="">More</th>
+						<!-- <th colspan="1" rowspan="" headers="" scope="">Sell</th> -->
 					</tr>
 				</thead>
 				<!-- <tbody>
@@ -65,7 +65,7 @@
 				</tbody> -->
 				<tbody>
 					{% for a in assets %}
-						<tr data-href="{}">
+						<tr>
 							{% for key, data in a.items %}
 								{% if key == 'symbol' or key == 'name' %}
 									<th colspan="1">{{ data }}</th>
@@ -73,8 +73,8 @@
 									<td scope="" colspan="1">{{ data }}</td>
 								{% endif %}
 							{% endfor %}
-							<td><a href="{% url 'buy' a.symbol %}" title="">Buy</a></td>
-							<td><a href="{% url 'sell' a.symbol %}" title="">Sell</a></td>
+							<td><a href="{% url 'stock' a.symbol %}" title="">More</a></td>
+							<!-- <td><a href="{% url 'sell' a.symbol %}" title="">Sell</a></td> -->
 						</tr>
 					{% endfor %}
 				</tbody>
