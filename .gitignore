@@ -6,3 +6,5 @@ portfolio/migrations
 analysis/migrations
 
 .DS_Store
+
+requirements.txt

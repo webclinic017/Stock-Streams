@@ -32,13 +32,15 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'portfolio.apps.PortfolioConfig',
+    'channels',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'portfolio.apps.PortfolioConfig',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -70,6 +72,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'finance_portfolio.wsgi.application'
+# ASGI_APPLICATION = 'finance_portfolio.asgi.application'
+ASGI_APPLICATION = 'portfolio.asgi.application'
 
 
 # Database
@@ -120,3 +124,18 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+# Kafka Bootstrap Server
+# KAFKA_SERVERS = os.getenv('KAFKA_SERVERS', default='broker:9092')
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [os.environ.get('REDIS_URL', 'redis://localhost:6379')],
+        },
+        # "ROUTING": "portfolio.routing.channel_routing",
+    },
+}

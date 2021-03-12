@@ -70,7 +70,7 @@
 								{% if key == 'symbol' or key == 'name' %}
 									<th colspan="1">{{ data }}</th>
 								{% else %}
-									<td scope="" colspan="1">{{ data }}</td>
+									<td scope="" colspan="1">{{ data|floatformat:2 }}</td>
 								{% endif %}
 							{% endfor %}
 							<td><a href="{% url 'stock' a.symbol %}" title="">More</a></td>
