@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'finance_portfolio.apps.finance_portfolioConfig',
     'portfolio.apps.PortfolioConfig',
     'channels',
     'django.contrib.admin',
@@ -72,8 +73,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'finance_portfolio.wsgi.application'
-# ASGI_APPLICATION = 'finance_portfolio.asgi.application'
-ASGI_APPLICATION = 'portfolio.asgi.application'
+ASGI_APPLICATION = 'finance_portfolio.asgi.application'
+# ASGI_APPLICATION = 'portfolio.asgi.application'
 
 
 # Database
@@ -139,3 +140,7 @@ CHANNEL_LAYERS = {
         # "ROUTING": "portfolio.routing.channel_routing",
     },
 }
+
+# Activate Django-Heroku.
+import django_heroku
+django_heroku.settings(locals())

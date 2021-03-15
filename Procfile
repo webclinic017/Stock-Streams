@@ -1,0 +1,1 @@
+web: gunicorn finance_portfolio.wsgi --log-file--

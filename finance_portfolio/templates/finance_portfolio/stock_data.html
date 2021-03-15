@@ -1,0 +1,317 @@
+<!-- finance_portfolio/stock_data.html -->
+{% extends 'finance_portfolio/base.html' %}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-crosshair@1.1.6/dist/chartjs-plugin-crosshair.min.js"></script>
+
+{% block stock_info %}
+
+<div class="">
+	<div class="d-flex flex-row justify-content-between w-100">
+		<h2>{{ asset_info.name }}</h2>
+		<h3>Next Update: <span id="update_timer">59</span></h3>
+	</div>
+	<!-- <input id="stream_table_update" type="button" value="Update"> -->
+	<div class="mb-4">
+    <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <a id="show_day_nav" class="nav-link active">Streamed</a>  
+      </li>
+      <li class="nav-item">
+        <a id="show_month_nav" class="nav-link">Past 30 Days</a>  
+      </li>      
+    </ul>
+    <canvas id="stock_chart_day"></canvas>
+		<canvas id="stock_chart_month"></canvas>
+    <p id="no_data_message">Something went wrong😨 Try searching for something else! </p>
+	</div>
+	<div class="d-flex justify-content-between">
+		<div class="w-75">			
+			<table id="stream_table" class="table table-bordered shadow mh-50">
+		        <caption class="">Stock Data from AlpacaMarkets</caption>
+		        <thead>
+		            <tr>
+		                <th>TimeStamp</th>
+		                <th>Open</th>
+		                <th>Close</th>
+		                <th>High</th>
+		                <th>Low</th>
+		                <th>Volume</th>
+		            </tr>
+		        </thead>
+		        <tbody>
+		        </tbody>
+		    </table>
+	    </div>
+	    <div class="w-25 ml-2">
+	    	<!-- {{ asset_info }} -->
+	    	<table class="table table-bordered shadow">
+	    		<tbody>
+	    			{% for info, sym_info in asset_info.items %}
+	    			<tr class="scope">
+	    				<td colspan="1">{{ info|upper }}</td>
+	    				<td colspan="1">{{ sym_info|upper }}</td>
+	    			</tr>
+	    			{% endfor %}
+	    		</tbody>
+	    	</table>
+	    </div>
+    </div>
+    
+    <!-- <textarea id="chat-log" cols="100" rows="20"></textarea><br> -->
+    <!-- <input id="chat-message-input" type="text" size="100"><br> -->
+    
+    {{ symbol|json_script:"symbol" }}
+    <script>
+      const symbol = JSON.parse(document.getElementById('symbol').textContent);
+
+      const streamSocket = new WebSocket(
+          'ws://'
+          + window.location.host
+          + '/ws/stream/'
+          + symbol
+          + '/'
+      );
+
+      streamSocket.onopen = () => console.log('Websocket CONNECTED', symbol)
+
+      streamSocket.onmessage = (e) => {
+          const data = JSON.parse(e.data);
+          // console.log(data, 'onmessage')
+
+          const market_status = data.market_status;
+
+          if (market_status) {
+
+            const info_table = document.getElementById("stream_table");
+            
+            const row = info_table.insertRow(1)
+            for (const d in data.message) {
+                const cell = row.insertCell(-1)
+                cell.innerHTML = data.message[d]
+            }
+            const new_chart_data = {
+              x: data.message.timestamp,
+              y: data.message.close
+            };
+            // console.log(data, new_chart_data);
+
+            update_chart_day(new_chart_data);
+          }
+            
+      };
+
+      streamSocket.onclose = function(e) {
+          console.error('Stream socket closed unexpectedly');
+      };
+
+      // document.querySelector('#stream_table_update').onclick = () => {
+      //     streamSocket.send(JSON.stringify({
+      //         'message': 'ping'
+      //     }));
+      // };
+
+      function runTimer() {
+    		let timer_current = parseInt(document.getElementById('update_timer').innerHTML);
+    		if (timer_current === 0)
+    			document.getElementById('update_timer').innerHTML = 59;
+    		else
+    			document.getElementById('update_timer').innerHTML = --timer_current;
+      }
+
+      window.onload = setInterval( () => streamSocket.send( JSON.stringify({ 'message': 'ping' }) ), 60000);
+
+    	window.onload = setInterval( () => runTimer(), 1000);
+
+      var ctx_day = document.getElementById('stock_chart_day').getContext('2d');
+      // document.getElementById('stock_chart_day').style.display = 'none';
+
+    	var ctx_month = document.getElementById('stock_chart_month').getContext('2d');
+
+    	const options = {
+        'responsive': true,
+        'scales': {
+          'xAxes': [{
+            'type': 'time',
+            // 'time': {
+            //   'parser': 'MM-DD-YYYY',
+            //   'unit': 'week',
+            //   'displayFormats': {
+            //     'day': 'MM-DD-YYYY'
+            //   },
+            // },
+            'distribution': 'series',
+            'gridLines': { 'display': false },
+            'display': false,
+          }],
+          'yAxes': [{
+            'gridLines': { 
+              'display': true,
+              'drawBorder': true,
+              'lineWidth': 1, 
+            }
+          }]
+        },
+        'layout': {
+          'padding': {
+            'right': 30,
+            'top': 20,
+          }
+        },
+        'ticks': {
+          'source': 'data'
+        },
+        'legend': { 'display': false, },
+        'tooltips': {
+          'position': 'average',
+          'mode': 'interpolate',
+          'intersect': false,
+          'titleFontSize': 18,
+          'bodyFontSize': 16,
+          'xPadding': 10,
+          'yPadding': 10,
+          'callbacks': {
+            'title': (a, d) => {
+              return moment(a[0].xLabel).format('ll');
+            },
+            'label': (tooltipItem) => {
+              // console.log(tooltipItem);
+              return `${symbol}: $${tooltipItem.yLabel}`;
+            }
+          },
+          'displayColors': false,
+        },
+        'plugins': {
+          'crosshair': {
+            'line': {
+              'color': 'rgb(75, 192, 192)',
+              'width': 1,
+              'dashPattern': [3, 3],
+            },
+            'sync': {
+              'enabled': false
+            },
+            'zoom': {
+              'enabled': false,
+            },
+            'snap': { 'enabled': true, },
+          }
+        }
+      }
+      const chart_data_raw = {{ stock_data_month|safe }};
+
+      const chart_data = chart_data_raw.data;
+      chart_data.forEach( (d, index) => {
+        chart_data[index] = {
+          x: d.t,
+          y: d.y.toFixed(2)
+        }
+      })
+
+      let stockChartM;
+      let stockChartD;
+      if (chart_data != null) {
+    	  stockChartM = new Chart(ctx_month, {
+    		  'type': 'scatter',
+    		  'data': {
+            'datasets': [{
+              'label': symbol,
+              'data': chart_data,
+              'fill': false,
+              'lineTension': 0.15,
+              'borderColor': 'rgb(75, 192, 192)',
+              'showLine': true,
+            }]
+          },
+          // data: chart_data,
+    	   	'options': options,
+    	  })
+
+        stockChartD = new Chart(ctx_day, {
+          'type': 'scatter',
+          'data': {
+            'datasets': [{
+              'label': symbol,
+              'data': [chart_data[chart_data.length-2], chart_data[chart_data.length-1]],
+              'fill': false,
+              'lineTension': 0.15,
+              'borderColor': 'rgb(75, 192, 192)',
+              'showLine': true,
+            }]
+          },
+          'options': options,
+        })
+        // console.log(stockChartD.data.datasets)
+        document.getElementById('no_data_message').style.display="none";
+      } else {
+        ctx.style.display = 'none';
+        document.getElementById('no_data_message').style.display="block";
+      }
+
+      function show_chart_day() {
+        document.getElementById('stock_chart_day').style.display = 'block'
+        document.getElementById('stock_chart_month').style.display = 'none';
+        document.getElementById('show_day_nav').classList.add('active');
+        document.getElementById('show_month_nav').classList.remove('active');
+      }
+
+      function show_chart_month() {
+        document.getElementById('stock_chart_day').style.display = 'none'
+        document.getElementById('stock_chart_month').style.display = 'block';
+        document.getElementById('show_day_nav').classList.remove('active');
+        document.getElementById('show_month_nav').classList.add('active');
+      }
+
+      document.querySelector('#show_day_nav').onclick = () => {
+        show_chart_day()
+      }
+
+      document.querySelector('#show_month_nav').onclick = () => {
+        show_chart_month()
+      }
+
+      function update_chart_day(data) {
+        console.log("1", data);
+        stockChartD.data.datasets.forEach( (datasets) => {
+          datasets.data.push(data);
+        });
+        // console.log("3", stockChartD.data.datasets[0].data);
+        stockChartD.update();
+      }
+
+      show_chart_day();
+
+    </script>
+</div>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

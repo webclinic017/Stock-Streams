@@ -16,10 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-app_name = "FinPorto"
+from . import views
+
+app_name = "finance_portfolio"
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('portfolio.urls')),
-    # path('/analysis', include('analysis.urls'))
+    path('', views.home, name="home"),
+    path('stream/<str:symbol>/', views.stream, name="stream"),
+    # path('portfolio/', include('portfolio.urls')),
 ]

@@ -2,9 +2,8 @@
 db.sqlite3
 
 portfolio/migrations
+portfolio/templates/chat
 
 analysis/migrations
 
 .DS_Store
-
-requirements.txt

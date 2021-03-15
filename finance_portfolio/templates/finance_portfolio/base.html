@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>LiveStock</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-crosshair@1.1.6/dist/chartjs-plugin-crosshair.min.js"></script>
+</head>
+<body>
+	<div class="container">
+		<h1 class="py-3 display-3"><a href="{% url 'home' %}" class="text-decoration-none"><span class="text-danger">&bull;Live</span><span class="text-success">Stock</span></a></h1>
+		<form id="stock-search" method="post" accept-charset="utf-8" >
+      {% csrf_token %}
+			<div class="input-group w-50">
+				<input id="stock_symbol_input" type="text" name="search" placeholder="Search for a stock!" autocomplete="off" class="form-control" />
+				<div class="input-group-append">
+					<input type="submit" id="stock_symbol_search" name="submit" class="btn btn-info" value="Search" />
+				</div>
+			</div>
+		</form>
+		<div class="mt-4">
+			{% block stock_info %}
+				{# stock information here #}
+			{% endblock %}
+		</div>
+		<script>
+			// document.querySelector('#stock_symbol_input').focus();
+	        // document.querySelector('#stock_symbol_input').onkeyup = e => {
+	        //     if (e.keyCode === 13) {  // enter, return
+	        //         document.querySelector('#stock_symbol_search').click();
+	        //     }
+	        // };
+
+	        // document.querySelector('#stock_symbol_search').onclick = e => {
+	        //     var symbol = document.querySelector('#stock_symbol_input').value.toUpperCase();
+	        //     if (symbol.length !== 0) {
+	        //     	window.location.pathname = '/stream/' + symbol + '/';
+	        //     }
+	        // };
+		</script>
+		{% block content %}
+		{% endblock %}
+	</div>
+</body>
+</html>
