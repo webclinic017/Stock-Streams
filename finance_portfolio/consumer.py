@@ -84,7 +84,7 @@ class AlpacaConsumer(WebsocketConsumer):
 		# print(alpaca)
 		self.symbol = self.scope['url_route']['kwargs']['symbol']
 		# ws = alpacaStream.AlpacaStreamService(event, [f'{event}.{s}' for s in symbols])
-		print("Websocket is connected as alpaca consumer")
+		print("Websocket is connected using alpaca consumer")
 		# print(self.symbol, self.scope)
 		# self.ws = alpacaStream.AlpacaStreamService('AM', self.symbol)
 

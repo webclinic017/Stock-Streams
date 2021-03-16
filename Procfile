@@ -1,1 +1,1 @@
-web: python manage.py runserver
+web: gunicorn finance_portfolio.wsgi --log-file -

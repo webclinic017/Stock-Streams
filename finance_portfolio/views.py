@@ -18,7 +18,7 @@ def testroom(request, room_name):
 
 def home(request):
 	if request.method == 'POST':
-		print(request.POST, request.POST['search'])
+		# print(request.POST, request.POST['search'])
 		stock_symbol = request.POST['search'].upper()
 
 		return redirect(f'/stream/{stock_symbol}')

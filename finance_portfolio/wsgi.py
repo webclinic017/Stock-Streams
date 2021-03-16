@@ -13,4 +13,11 @@ from django.core.wsgi import get_wsgi_application
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'finance_portfolio.settings')
 
+# SECRET_KEY = os.environ.get('SECRET_KEY')
+
+# try:
+# 	from .local_settings import *
+# except Exception as e:
+# 	pass
+
 application = get_wsgi_application()
