@@ -8,14 +8,6 @@ import json
 
 from . import alpaca 
 
-# from .consumer import fromStream
-
-def testchat(request):
-	return render(request, template_name="chat/chat.html")
-
-def testroom(request, room_name):
-	return render(request, template_name='chat/room.html', context={'room_name': room_name})
-
 def home(request):
 	if request.method == 'POST':
 		# print(request.POST, request.POST['search'])

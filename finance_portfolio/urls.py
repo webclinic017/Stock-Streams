@@ -24,5 +24,4 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name="home"),
     path('stream/<str:symbol>/', views.stream, name="stream"),
-    # path('portfolio/', include('portfolio.urls')),
 ]

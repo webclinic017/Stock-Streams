@@ -83,35 +83,25 @@
 
           const market_status = data.market_status;
 
-          if (market_status) {
-
-            const info_table = document.getElementById("stream_table");
-            
-            const row = info_table.insertRow(1)
-            for (const d in data.message) {
-                const cell = row.insertCell(-1)
-                cell.innerHTML = data.message[d]
-            }
-            const new_chart_data = {
-              x: data.message.timestamp,
-              y: data.message.close
-            };
-            // console.log(data, new_chart_data);
-
-            update_chart_day(new_chart_data);
+          const info_table = document.getElementById("stream_table");
+          
+          const row = info_table.insertRow(1)
+          for (const d in data.message) {
+              const cell = row.insertCell(-1)
+              cell.innerHTML = data.message[d]
           }
-            
+          const new_chart_data = {
+            x: data.message.timestamp,
+            y: data.message.close
+          };
+          console.log(market_status, data, new_chart_data);
+
+          update_chart_day(new_chart_data);
       };
 
       streamSocket.onclose = function(e) {
           console.error('Stream socket closed unexpectedly');
       };
-
-      // document.querySelector('#stream_table_update').onclick = () => {
-      //     streamSocket.send(JSON.stringify({
-      //         'message': 'ping'
-      //     }));
-      // };
 
       function runTimer() {
     		let timer_current = parseInt(document.getElementById('update_timer').innerHTML);
@@ -122,12 +112,9 @@
       }
 
       window.onload = setInterval( () => streamSocket.send( JSON.stringify({ 'message': 'ping' }) ), 60000);
-
     	window.onload = setInterval( () => runTimer(), 1000);
 
       var ctx_day = document.getElementById('stock_chart_day').getContext('2d');
-      // document.getElementById('stock_chart_day').style.display = 'none';
-
     	var ctx_month = document.getElementById('stock_chart_month').getContext('2d');
 
     	const options = {
@@ -177,7 +164,6 @@
               return moment(a[0].xLabel).format('ll');
             },
             'label': (tooltipItem) => {
-              // console.log(tooltipItem);
               return `${symbol}: $${tooltipItem.yLabel}`;
             }
           },
@@ -225,7 +211,6 @@
               'showLine': true,
             }]
           },
-          // data: chart_data,
     	   	'options': options,
     	  })
 
@@ -243,7 +228,6 @@
           },
           'options': options,
         })
-        // console.log(stockChartD.data.datasets)
         document.getElementById('no_data_message').style.display="none";
       } else {
         ctx.style.display = 'none';
@@ -273,11 +257,9 @@
       }
 
       function update_chart_day(data) {
-        console.log("1", data);
         stockChartD.data.datasets.forEach( (datasets) => {
           datasets.data.push(data);
         });
-        // console.log("3", stockChartD.data.datasets[0].data);
         stockChartD.update();
       }
 
