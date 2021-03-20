@@ -65,9 +65,10 @@
     {{ symbol|json_script:"symbol" }}
     <script>
       const symbol = JSON.parse(document.getElementById('symbol').textContent);
-
+      const ws_scheme = window.location.protocol == 'https:' ? 'wss' : 'ws'
       const streamSocket = new WebSocket(
-          'ws://'
+          ws_scheme
+          + '://'
           + window.location.host
           + '/ws/stream/'
           + symbol

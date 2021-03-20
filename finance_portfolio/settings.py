@@ -28,7 +28,7 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*', 'localhost', 'stock-streams.herokuapp.com', '0.0.0.0']
 
@@ -37,7 +37,6 @@ ALLOWED_HOSTS = ['*', 'localhost', 'stock-streams.herokuapp.com', '0.0.0.0']
 
 INSTALLED_APPS = [
     'finance_portfolio.apps.finance_portfolioConfig',
-    'portfolio.apps.PortfolioConfig',
     'channels',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -85,22 +84,25 @@ ASGI_APPLICATION = 'finance_portfolio.asgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
+DB_USER = os.environ.get('DB_USER')
+DB_PASSWORD = os.environ.get('DB_PASSWORD')
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'postgresql-defined-35809',
-        'HOST': 'localhost',
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASSWORD'),
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'postgresql-defined-35809',
+#         'HOST': 'localhost',
+#         'USER': DB_USER,
+#         'PASSWORD': DB_PASSWORD,
+#     }
+# }
 
 
 # Password validation
@@ -140,7 +142,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATIC_URL = '/static/'
+STATIC_URL = '/staticfiles/'
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
