@@ -257,10 +257,15 @@
       }
 
       function update_chart_day(data) {
-        stockChartD.data.datasets.forEach( (datasets) => {
-          datasets.data.push(data);
-        });
-        stockChartD.update();
+        const current_dataset = stockChartD.data.datasets[0].data[stockChartD.data.datasets[0].data.length-1]
+        const isSameData = JSON.stringify(current_dataset) === JSON.stringify(data)
+        console.log(data, current_dataset, isSameData)
+        if (!isSameData) {
+          stockChartD.data.datasets.forEach( (datasets) => {
+            datasets.data.push(data);
+          });
+          stockChartD.update();
+        }
       }
 
       show_chart_day();

@@ -5,15 +5,32 @@
 <div>
   <h2>Check out these ETFs or search for a stock!</h2>
 	<div>
-		<h3>S&P 500 </h3>
+		<h3>S&P 500</h3>
 		<ul>
-			<li>SPY</li>
+      <li><a href="{% url 'stream' 'SPY' %}">SPDR S&P 500 ETF Trust (SPY)</a></li>
+      <li><a href="{% url 'stream' 'SPLG' %}">SPDR Portfolio S&P 500 ETF (SPLG)</a></li>
+      <li><a href="{% url 'stream' 'VOO' %}">Vanguard S&P 500 ETF (VOO)</a></li>
+      <li><a href="{% url 'stream' 'SCHX' %}">Schwab U.S. Large Cap ETF (SCHX)</a></li>
+      <li><a href="{% url 'stream' 'IVV' %}">iShares Core S&P 500 ETF (IVV)</a></li>
+      <li><a href="{% url 'stream' 'IVW' %}">iShares S&P 500 Growth ETF (IVW)</a></li>
 		</ul>
 	</div>
   <div>
     <h3>Dow Jones Industrial Average</h3>
     <ul>
-      <li>DIA</li>
+      <li><a href="{% url 'stream' 'DIA' %}">SPDR Dow Jones Industrial Average ETF (DIA)</a></li>
+      <li><a href="{% url 'stream' 'IYY' %}">iShares Dow Jones US ETF (IYY)</a></li>
+      <li><a href="{% url 'stream' 'DDM' %}">ProShares Ultra Dow30 (DDM)</a></li>
+    </ul>
+  </div>
+  <div>
+    <h3>Nasdaq Composite</h3>
+    <ul>
+      <li><a href="{% url 'stream' 'QQQ' %}">Invesco QQQ Trust (QQQ)</a></li>
+      <li><a href="{% url 'stream' 'QQQM' %}">Invesco Nasdaq 100 ETF (QQQM)</a></li>
+      <li><a href="{% url 'stream' 'QQQJ' %}">Invesco Nasdaq Next Gen 100 ETF (QQQJ)</a></li>
+      <li><a href="{% url 'stream' 'USNQX' %}">USAA Nasdaq-100 Index Fund (USNQX)</a></li>
+      <li><a href="{% url 'stream' 'IVNQX' %}">Invesco Nasdaq 100 Index Fund (IVNQX)</a></li>
     </ul>
   </div>
 </div>

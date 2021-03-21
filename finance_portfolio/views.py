@@ -10,13 +10,16 @@ from . import alpaca
 
 def home(request):
 	if request.method == 'POST':
-		# print(request.POST, request.POST['search'])
 		stock_symbol = request.POST['search'].upper()
-
 		return redirect(f'/stream/{stock_symbol}')
+		
 	return render(request, template_name="finance_portfolio/home.html", context={})
 
 def stream(request, symbol):
+	if request.method == 'POST':
+		stock_symbol = request.POST['search'].upper()
+		return redirect(f'/stream/{stock_symbol}')
+
 	symbol_data_month = alpaca.populate_historical(symbol).df
 	symbol_data_month_close = symbol_data_month[(symbol.upper(), 'close')]
 	chart_data = [{'t': t.strftime('%m-%d-%Y'), 'y': float(c)} for t, c in zip(symbol_data_month_close.index, symbol_data_month_close)]
