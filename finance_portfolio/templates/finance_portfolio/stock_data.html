@@ -81,22 +81,24 @@
           const data = JSON.parse(e.data);
           // console.log(data, 'onmessage')
 
-          const market_status = data.market_status;
+          // const market_status = data.market_status;
 
-          const info_table = document.getElementById("stream_table");
-          
-          const row = info_table.insertRow(1)
-          for (const d in data.message) {
-              const cell = row.insertCell(-1)
-              cell.innerHTML = data.message[d]
-          }
           const new_chart_data = {
             x: data.message.timestamp,
             y: data.message.close
           };
-          console.log(market_status, data, new_chart_data);
+          // console.log(market_status, data, new_chart_data);
+          const didChartUpdate = update_chart_day(new_chart_data);
 
-          update_chart_day(new_chart_data);
+          if (didChartUpdate) {
+            const info_table = document.getElementById("stream_table");
+            
+            const row = info_table.insertRow(1)
+            for (const d in data.message) {
+                const cell = row.insertCell(-1)
+                cell.innerHTML = data.message[d]
+            }
+          }
       };
 
       streamSocket.onclose = function(e) {
@@ -265,7 +267,9 @@
             datasets.data.push(data);
           });
           stockChartD.update();
-        }
+          return true
+        } else
+          return false
       }
 
       show_chart_day();

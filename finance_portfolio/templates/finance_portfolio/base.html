@@ -12,7 +12,8 @@
 </head>
 <body>
 	<div class="container">
-		<h1 class="py-3 display-3"><a href="{% url 'home' %}" class="text-decoration-none"><span class="text-danger">&bull;Live</span><span class="text-success">Stock</span></a></h1>
+		<!-- <h1 class="py-3 display-3"><a href="{% url 'home' %}" class="text-decoration-none"><span class="text-danger">&bull;Live</span><span class="text-success">Stock</span></a></h1> -->
+		<h1 class="py-3 display-3"><a href="{% url 'home' %}" class="text-decoration-none"><span class="text-success">StockStream</span></a></h1>
 		<form id="stock-search" method="post" accept-charset="utf-8" >
       		{% csrf_token %}
 			<div class="input-group w-50">
