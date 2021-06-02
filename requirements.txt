@@ -53,7 +53,7 @@ transliterate==1.10.2
 Twisted==20.3.0
 txaio==20.12.1
 Unidecode==1.2.0
-urllib3==1.26.4
+urllib3==1.26.5
 vishap==0.1.5
 websocket-client==0.57.0
 websockets==8.1
